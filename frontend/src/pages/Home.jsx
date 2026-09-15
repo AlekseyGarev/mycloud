@@ -1,11 +1,9 @@
-import React from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 export default function Home() {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
-  // Вариант А: Автоматический редирект в хранилище, если пользователь уже залогинен
   if (isAuthenticated) {
     return <Navigate to="/storage" replace />;
   }

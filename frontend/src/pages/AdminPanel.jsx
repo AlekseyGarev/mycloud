@@ -1,11 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axiosInstance';
 
 export default function AdminPanel() {
   const [users, setUsers] = useState([]); const [loading, setLoading] = useState(true); const [error, setError] = useState('');
-  const load = async () => { try { setLoading(true); setUsers((await api.get('/admin/users/')).data); setError(''); } catch { setError('Не удалось загрузить пользователей'); } finally { setLoading(false); } };
-  useEffect(() => { load(); }, []);
+  
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const response = await api.get('/admin/users/');
+        setUsers(response.data);
+        setError('');
+      } catch {
+        setError('Не удалось загрузить пользователей');
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    load();
+  }, []);
+  
   const toggleAdmin = async (u) => { try { const r = await api.patch(`/admin/users/${u.id}/`, { is_admin: !u.is_admin }); setUsers((xs) => xs.map((x) => x.id === u.id ? r.data : x)); } catch (e) { alert(e.response?.data?.detail || 'Не удалось изменить права'); } };
   const removeUser = async (u) => { if (!window.confirm(`Удалить пользователя ${u.username} и его файлы?`)) return; try { await api.delete(`/admin/users/${u.id}/`); setUsers((xs) => xs.filter((x) => x.id !== u.id)); } catch (e) { alert(e.response?.data?.detail || 'Не удалось удалить пользователя'); } };
   const size = (n) => n < 1024 ? `${n} B` : n < 1048576 ? `${(n/1024).toFixed(1)} KB` : `${(n/1048576).toFixed(1)} MB`;

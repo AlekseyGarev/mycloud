@@ -65,6 +65,27 @@ export default function Storage() {
   const formatSize = (bytes) => bytes < 1024 ? `${bytes} B` : bytes < 1048576 ? `${(bytes/1024).toFixed(1)} KB` : `${(bytes/1048576).toFixed(1)} MB`;
   const formatDate = (value) => value ? new Date(value).toLocaleString('ru-RU') : 'Никогда';
 
+  const handleCopy = async () => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(generatedLink);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = generatedLink;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+      }
+  
+      alert('Ссылка скопирована');
+    } catch {
+      alert('Не удалось скопировать ссылку');
+    }
+  };
+
   return (
     <div className="container">
       <h2 className="home-title">{targetUserId ? `Хранилище пользователя ${requestedUsername || `#${targetUserId}`}` : 'Моё хранилище файлов'}</h2>
@@ -79,7 +100,7 @@ export default function Storage() {
           <button type="submit" className="btn btn-primary mt-10 w-100">Загрузить на сервер</button>
         </form>
       </div>
-      {generatedLink && <div className="share-link-box mb-15"><span>Специальная ссылка:</span><input className="share-input" value={generatedLink} readOnly /><button onClick={() => navigator.clipboard.writeText(generatedLink)} className="btn btn-success btn-sm">Скопировать</button></div>}
+      {generatedLink && <div className="share-link-box mb-15"><span>Специальная ссылка:</span><input className="share-input" value={generatedLink} readOnly /><button onClick={handleCopy} className="btn btn-success btn-sm">Скопировать</button></div>}
       {error && <div className="alert-error">{typeof error === 'string' ? error : JSON.stringify(error)}</div>}
       <div className="table-container table-responsive">
         <table className="data-table"><thead><tr><th>Имя файла</th><th>Размер</th><th>Дата загрузки</th><th>Последнее скачивание</th><th>Комментарий</th><th>Действия</th></tr></thead>

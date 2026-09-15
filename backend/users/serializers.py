@@ -50,7 +50,17 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'full_name', 'email', 'is_admin', 'storage_path', 'files_count', 'total_size')
+        fields = (
+        'id',
+        'username',
+        'full_name',
+        'email',
+        'is_admin',
+        'is_superuser',
+        'storage_path',
+        'files_count',
+        'total_size',
+        )
         read_only_fields = fields
 
     def get_files_count(self, obj):

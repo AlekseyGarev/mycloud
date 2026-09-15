@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Вспомогательная функция для считывания куки по имени
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
@@ -21,7 +20,7 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Автоматически добавляем X-CSRFToken во все POST/PUT/PATCH/DELETE запросы
+
 api.interceptors.request.use((config) => {
   const csrftoken = getCookie('csrftoken');
   if (csrftoken) {

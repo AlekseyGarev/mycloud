@@ -6,4 +6,4 @@ class StorageConfig(AppConfig):
     name = 'storage'
 
     def ready(self):
-        import storage.signals  # noqa: F401
+        import storage.signals

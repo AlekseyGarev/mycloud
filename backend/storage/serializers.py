@@ -20,7 +20,6 @@ class FileSerializer(serializers.ModelSerializer):
         value = value.strip()
         if not value:
             raise serializers.ValidationError('Имя файла не может быть пустым.')
-        # В БД храним только отображаемое имя, но всё равно не разрешаем путь.
         if Path(value).name != value or '/' in value or '\\' in value:
             raise serializers.ValidationError('Имя файла не должно содержать путь.')
         return value

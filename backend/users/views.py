@@ -22,8 +22,6 @@ def get_csrf_token(request):
 
 
 def enforce_csrf(request):
-    # DRF освобождает APIView от Django CsrfViewMiddleware, поэтому для публичных
-    # POST регистрации/входа проверяем токен явно.
     SessionAuthentication().enforce_csrf(request)
 
 
@@ -114,7 +112,7 @@ class AdminUserDetailView(APIView):
         if user.pk == request.user.pk:
             return Response({'detail': 'Нельзя удалить самого себя'}, status=status.HTTP_400_BAD_REQUEST)
         username = user.username
-        user.delete()  # post_delete у File удалит физические файлы.
+        user.delete() 
         logger.info('Администратор %s удалил пользователя %s', request.user.username, username)
         return Response(status=status.HTTP_204_NO_CONTENT)
 

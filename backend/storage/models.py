@@ -18,7 +18,6 @@ class File(models.Model):
     comment = models.TextField(blank=True, default='', verbose_name='Комментарий')
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата загрузки')
     last_downloaded_at = models.DateTimeField(null=True, blank=True, verbose_name='Дата последнего скачивания')
-    # UUID не раскрывает логин, путь хранилища или имя файла и соответствует требованию обезличенной ссылки.
     share_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, verbose_name='Токен доступа')
 
     class Meta:

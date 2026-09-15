@@ -11,7 +11,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Storage from './pages/Storage';
 import PublicDownload from './pages/PublicDownload';
-import AdminPanel from './pages/AdminPanel'; // Импортируем созданную админ-панель
+import AdminPanel from './pages/AdminPanel'; 
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -19,7 +19,6 @@ function ProtectedRoute({ children, adminOnly = false }) {
   if (loading) return <div className="container loading-container">Загрузка...</div>;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
-  // Проверяем все возможные варианты флага админа в Django/REST API
   const isAdmin = user?.is_admin || user?.is_superuser || user?.is_staff;
   if (adminOnly && !isAdmin) return <Navigate to="/storage" replace />;
 

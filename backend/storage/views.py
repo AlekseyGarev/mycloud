@@ -39,7 +39,6 @@ class FileListUploadView(APIView):
                 return Response({'detail': 'Пользователь не найден'}, status=status.HTTP_404_NOT_FOUND)
             files = File.objects.filter(user_id=target_user_id)
         else:
-            # Даже администратор без user_id видит своё хранилище; для чужого обязан указать пользователя.
             files = File.objects.filter(user=request.user)
         return Response(FileSerializer(files.select_related('user'), many=True, context={'request': request}).data)
 
@@ -69,7 +68,6 @@ class FileListUploadView(APIView):
         for uploaded in files:
             original_name = custom_name if len(files) == 1 and custom_name else uploaded.name
             name_serializer = FileSerializer(data={'original_name': original_name, 'comment': comment})
-            # Используем валидатор имени без попытки создать объект сериализатором.
             try:
                 original_name = name_serializer.fields['original_name'].run_validation(original_name)
             except Exception as exc:

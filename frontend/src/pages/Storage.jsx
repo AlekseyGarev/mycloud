@@ -17,6 +17,7 @@ export default function Storage() {
   const [customName, setCustomName] = useState('');
   const [comment, setComment] = useState('');
   const [editingId, setEditingId] = useState(null);
+  const [editingField, setEditingField] = useState(null);
   const [editOriginalName, setEditOriginalName] = useState('');
   const [editComment, setEditComment] = useState('');
   const [generatedLink, setGeneratedLink] = useState('');
@@ -45,10 +46,37 @@ export default function Storage() {
   };
 
   const handleDelete = (id) => { if (window.confirm('Удалить файл?')) dispatch(deleteFile(id)); };
-  const startEdit = (file) => { setEditingId(file.id); setEditOriginalName(file.original_name); setEditComment(file.comment || ''); };
+  
+  const startRename = (file) => {
+    setEditingId(file.id);
+    setEditingField('name');
+    setEditOriginalName(file.original_name);
+    setEditComment(file.comment || '');
+  };
+  
+  const startComment = (file) => {
+    setEditingId(file.id);
+    setEditingField('comment');
+    setEditOriginalName(file.original_name);
+    setEditComment(file.comment || '');
+  };
   const saveEdit = async (id) => {
-    const result = await dispatch(updateFile({ id, data: { original_name: editOriginalName, comment: editComment } }));
-    if (updateFile.fulfilled.match(result)) setEditingId(null);
+    const data = {};
+  
+    if (editingField === 'name') {
+      data.original_name = editOriginalName;
+    }
+  
+    if (editingField === 'comment') {
+      data.comment = editComment;
+    }
+  
+    const result = await dispatch(updateFile({ id, data }));
+  
+    if (updateFile.fulfilled.match(result)) {
+      setEditingId(null);
+      setEditingField(null);
+    }
   };
   const handleDownload = async (id, fileName) => {
     try {
@@ -106,12 +134,13 @@ export default function Storage() {
         <table className="data-table"><thead><tr><th>Имя файла</th><th>Размер</th><th>Дата загрузки</th><th>Последнее скачивание</th><th>Комментарий</th><th>Действия</th></tr></thead>
           <tbody>{loading ? <tr><td colSpan="6">Загрузка...</td></tr> : files.length === 0 ? <tr><td colSpan="6">Хранилище пустое</td></tr> : files.map((file) => (
             <tr key={file.id}>
-              <td>{editingId === file.id ? <input className="form-input" value={editOriginalName} onChange={(e) => setEditOriginalName(e.target.value)} /> : file.original_name}</td>
+              <td>{editingId === file.id && editingField === 'name' ? <input className="form-input"value={editOriginalName}onChange={(e) => setEditOriginalName(e.target.value)}/>: file.original_name}</td>
               <td>{formatSize(file.size)}</td><td>{formatDate(file.uploaded_at)}</td><td>{formatDate(file.last_downloaded_at)}</td>
-              <td>{editingId === file.id ? <input className="form-input" value={editComment} onChange={(e) => setEditComment(e.target.value)} /> : (file.comment || '—')}</td>
+              <td>{editingId === file.id && editingField === 'comment' ? <input className="form-input"value={editComment}onChange={(e) => setEditComment(e.target.value)}/> : (file.comment || '—')}</td>
               <td><div className="action-buttons">{editingId === file.id ? <button onClick={() => saveEdit(file.id)} className="btn btn-success btn-sm">Сохранить</button> : <>
                 <button onClick={() => handleDownload(file.id, file.original_name)} className="btn btn-primary btn-sm">Скачать</button>
-                <button onClick={() => startEdit(file)} className="btn btn-warning btn-sm">Редактировать</button>
+                <button onClick={() => startRename(file)} className="btn btn-warning btn-sm">Переименовать</button>
+                <button onClick={() => startComment(file)} className="btn btn-warning btn-sm">Комментарий</button>
                 <button onClick={() => handleShare(file.id)} className="btn btn-secondary btn-sm">Поделиться</button>
                 <button onClick={() => handleDelete(file.id)} className="btn btn-danger btn-sm">Удалить</button>
               </>}</div></td>
@@ -121,3 +150,5 @@ export default function Storage() {
     </div>
   );
 }
+
+

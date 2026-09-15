@@ -104,8 +104,13 @@ CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.getenv(
 
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = False  # React читает csrftoken и отправляет X-CSRFToken.
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = os.getenv(
+    'SESSION_COOKIE_SECURE', str(not DEBUG)
+).lower() in {'1', 'true', 'yes', 'on'}
+
+CSRF_COOKIE_SECURE = os.getenv(
+    'CSRF_COOKIE_SECURE', str(not DEBUG)
+).lower() in {'1', 'true', 'yes', 'on'}
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 

@@ -5,7 +5,7 @@ from users.models import User
 class UserApiTests(APITestCase):
     def setUp(self):
         response = self.client.get('/api/auth/csrf/')
-        self.csrf = response.json()['csrftoken']
+        self.csrf = response.json()['csrfToken']
 
     def test_registration_validates_and_creates_user(self):
         response = self.client.post('/api/auth/register/', {

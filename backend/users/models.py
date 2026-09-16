@@ -1,4 +1,5 @@
 import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -14,7 +15,7 @@ class User(AbstractUser):
         max_length=255,
         unique=True,
         default=default_storage_path,
-        verbose_name="Путь к хранилищу"
+        verbose_name="Путь к хранилищу",
     )
 
     class Meta:

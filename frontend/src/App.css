@@ -503,3 +503,39 @@
       min-width: 100px;
     }
   }
+
+
+  .upload-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 18px;
+  }
+  
+  .upload-header h3 {
+    margin: 0 0 5px;
+  }
+  
+  .upload-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+  
+  .upload-limit {
+    flex-shrink: 0;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eef6fb;
+    color: #287ca8;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .empty-storage {
+    padding: 32px 16px !important;
+    text-align: center !important;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }  

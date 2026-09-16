@@ -159,7 +159,15 @@ export default function Storage() {
           : "Моё хранилище файлов"}
       </h2>
       <div className="file-upload-card">
-        <h3>Загрузить новый файл</h3>
+        <div className="upload-header">
+          <div>
+            <h3>Загрузить новый файл</h3>
+            <p>
+              Выберите файл, при необходимости укажите новое имя и комментарий.
+            </p>
+          </div>
+          <span className="upload-limit">до 100 МБ</span>
+        </div>
         <form onSubmit={handleUpload} className="mt-15">
           <div className="upload-grid">
             <div className="form-group">
@@ -231,7 +239,9 @@ export default function Storage() {
               </tr>
             ) : files.length === 0 ? (
               <tr>
-                <td colSpan="6">Хранилище пустое</td>
+                <td colSpan="6" className="empty-storage">
+                  В хранилище пока нет файлов
+                </td>
               </tr>
             ) : (
               files.map((file) => (

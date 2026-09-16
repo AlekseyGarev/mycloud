@@ -166,7 +166,7 @@ export default function Storage() {
               Выберите файл, при необходимости укажите новое имя и комментарий.
             </p>
           </div>
-          <span className="upload-limit">до 100 МБ</span>
+          <span className="upload-limit">Макс. 100 МБ</span>
         </div>
         <form onSubmit={handleUpload} className="mt-15">
           <div className="upload-grid">

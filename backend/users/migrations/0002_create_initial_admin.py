@@ -8,7 +8,7 @@ def create_initial_admin(apps, schema_editor):
     if not User.objects.filter(username="admin").exists():
         User.objects.create(
             username="admin",
-            password=make_password("Admin123!"),
+            password=make_password(None),
             full_name="Администратор",
             email="admin@example.com",
             is_admin=True,
